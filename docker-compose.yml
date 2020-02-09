@@ -13,7 +13,6 @@ services:
     container_name: mysql
     env_file: 
       - app.env
-    volumes: 
-      - ./mysql/data:/var/lib/mysql
-    ports:
-      - 3306:3306
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    #   - ./mysql/data:/var/lib/mysql

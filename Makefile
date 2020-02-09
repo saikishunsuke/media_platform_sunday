@@ -4,3 +4,5 @@ dev:
 	- docker image prune -f
 	- @make build
 	- docker-compose up
+exec-db:
+	- docker-compose exec mysql bash
