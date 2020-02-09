@@ -10,9 +10,6 @@
 
 ## 背景
 - webサービスを作った経験がpythonのみであることに不安
-<<<<<<< HEAD
-- python以外のモダンな言語で書いてみよう => Go
-=======
 - python以外のモダンな言語で書いてみよう => Go
 
 ## 作業履歴
@@ -21,4 +18,3 @@
 - signup, signinの完成
 - passwordのhash化
 - signupでuser_idがかぶっているときに異常系でreturn
->>>>>>> c06a4f81ccb331439cf40ff06df55f1817f74bfd
