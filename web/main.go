@@ -1,7 +1,10 @@
 package main
 
 import (
+	"io"
+	"crypto/rand"
 	"encoding/json"
+	"encoding/base64"
 	"fmt"
 	"net/http"
 
@@ -18,6 +21,17 @@ type AuthData struct {
 	Password string `json:"password" gorm:"unique; not null; column:password"`
 }
 
+// CreateSession is func
+func (auth *AuthData) CreateSession() (session Session) {
+	sid := make([]byte, 32)
+	_, _ = io.ReadFull(rand.Reader, sid)
+	session = Session{
+		UUID: base64.URLEncoding.EncodeToString(sid),
+		UserID: auth.UserID,
+	}
+	return
+}
+
 // UserInformation is struct
 type UserInformation struct {
 	gorm.Model
@@ -26,11 +40,18 @@ type UserInformation struct {
 	Age      int
 }
 
+// Session is session
+type Session struct {
+	gorm.Model
+	UUID string
+	UserID string
+}
+
 var db *gorm.DB
 
 func init() {
 	db = getDb()
-	db.AutoMigrate(&AuthData{}, &UserInformation{})
+	db.AutoMigrate(&AuthData{}, &UserInformation{}, &Session{})
 	db.LogMode(true)
 }
 
@@ -54,6 +75,7 @@ func main() {
 	})
 	http.HandleFunc("/users/signup", signUpHandler)
 	http.HandleFunc("/users/signin", signInHandler)
+	http.HandleFunc("/users/signout", signOutHandler)
 	http.ListenAndServe(":80", nil)
 }
 
@@ -84,6 +106,12 @@ func signUpHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("User id is already used."))
 		return
 	}
+	session := auth.CreateSession()
+	cookie := &http.Cookie{
+		Name: "session_id",
+		Value: session.UUID,
+	}
+	http.SetCookie(w, cookie)
 	w.Write([]byte("OK."))
 }
 
@@ -112,5 +140,31 @@ func signInHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Password is wrong."))
 		return
 	}
+	session := auth.CreateSession()
+	cookie := &http.Cookie{
+		Name: "session_id",
+		Value: session.UUID,
+	}
+	if db.Create(&session).Error != nil {
+		w.Write([]byte("Failed."))
+		return
+	}
+	http.SetCookie(w, cookie)
 	w.Write([]byte("Signed In."))
+}
+
+func signOutHandler(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("session_id")
+	if err != nil || cookie.Value == "" {
+		return
+	}
+	newCookie := &http.Cookie{Name: "session_id"}
+	http.SetCookie(w, newCookie)
+	var session Session
+	if db.First(&session, &Session{UUID: cookie.Value}).RecordNotFound() {
+		fmt.Println("Session Record Not Found.")
+		return
+	}
+	db.Delete(&session)
+	w.Write([]byte("Signed out."))
 }
