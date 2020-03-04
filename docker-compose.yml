@@ -4,7 +4,7 @@ services:
     build: ./web
     volumes:
       - ./web:/go/src/work
-    command: realize start --run
+    # command: realize start --run
     tty: true
     ports:
       - 8088:80

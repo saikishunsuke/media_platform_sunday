@@ -6,3 +6,5 @@ dev:
 	- docker-compose up
 exec-db:
 	- docker-compose exec mysql bash
+exec-web:
+	- docker-compose exec web bash
