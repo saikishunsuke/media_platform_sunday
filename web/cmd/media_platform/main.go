@@ -21,5 +21,7 @@ func main() {
 	http.HandleFunc("/post/new", auth.SignInRequired(post.CreatePostHandler))
 	http.HandleFunc("/post/index", post.ReadAllPostsHandler)
 	http.HandleFunc("/post/mine", auth.SignInRequired(post.ReadOwnPostsHandler))
+	http.HandleFunc("/post/update", auth.SignInRequired(post.UpdatePostHandler))
+	http.HandleFunc("/post/delete", auth.SignInRequired(post.DeletePostHandler))
 	http.ListenAndServe(":80", nil)
 }

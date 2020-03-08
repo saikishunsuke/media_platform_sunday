@@ -48,7 +48,7 @@ func (user *User) GetPosts() (posts []Post, err error) {
 	query := db.Table("posts").
 		Select("posts.*, users.name, users.age").
 		Joins("inner join users on posts.user_id = users.user_id").
-		Where("posts.user_id = ?", user.UserID)
+		Where("posts.user_id = ? and posts.deleted_at is NULL", user.UserID)
 	rows, err := query.Rows()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -103,4 +103,12 @@ type Post struct {
 func (post *Post) Save() error {
 	fmt.Printf("%+v\n", post)
 	return db.Create(&post).Error
+}
+
+func (post *Post) Update(newPost Post) error {
+	return db.Model(&post).Updates(newPost).Error
+}
+
+func (post *Post) Delete() error {
+	return db.Delete(&post).Error
 }

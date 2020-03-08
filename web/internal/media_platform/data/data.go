@@ -26,7 +26,8 @@ func GetUser(userID string) (user User, err error) {
 func GetAllPosts() (posts []Post, err error) {
 	query := db.Table("posts").
 		Select("posts.*, users.name, users.age").
-		Joins("inner join users on posts.user_id = users.user_id")
+		Joins("inner join users on posts.user_id = users.user_id").
+		Where("posts.deleted_at is NULL")
 	rows, err := query.Rows()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -49,6 +50,11 @@ func GetAllPosts() (posts []Post, err error) {
 		post.User = user
 		posts = append(posts, post)
 	}
+	return
+}
+
+func GetPost(postID uint) (post Post, err error) {
+	err = db.First(&post, postID).Error
 	return
 }
 
