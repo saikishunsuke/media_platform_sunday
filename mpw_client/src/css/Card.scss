@@ -1,0 +1,48 @@
+.card {
+  font-family: "Hiragino Kaku Gothic ProN W3";
+  width: 45%;
+  vertical-align: top;
+  border-radius: 0.2rem;
+  box-shadow: none;
+  color: #4a4a4a;
+  display: inline-block;
+  margin: 0.5rem;
+  border: solid 1px #a4a4a4;
+
+  .card-header {
+    box-shadow: none;
+  }
+
+  .media {
+    padding: 0.5rem;
+
+    .media-left {
+      margin-right: 0.6rem;
+
+      img {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50%;
+      }
+    }
+
+    .user-name {
+      height: 2rem;
+      line-height: 2rem;
+
+      .user-id {
+        color: #aaaaaa;
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .content time {
+    font-size: 0.7rem;
+  }
+
+  .content .text {
+    white-space: pre-wrap;
+  }
+
+}

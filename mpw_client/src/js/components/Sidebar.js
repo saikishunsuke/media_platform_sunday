@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../css/SideBar.scss";
+import "../../css/Sidebar.scss";
 
 export default class Sidebar extends React.Component {
   constructor(props) {
@@ -20,6 +20,10 @@ export default class Sidebar extends React.Component {
           link: "timeline"
         },
         {
+          text: "Create Post",
+          link: "create"
+        },
+        {
           text: "Sign out",
           link: "",
           onClick: this.props.signOut
@@ -32,8 +36,7 @@ export default class Sidebar extends React.Component {
         },
         {
           text: "Sign in",
-          link: "signin",
-          onClick: this.props.signIn
+          link: "signin"
         },
         {
           text: "Sign up",
@@ -49,8 +52,8 @@ export default class Sidebar extends React.Component {
       : this.state.notSignedIn;
     return (
       <div className="column is-one-fifth sidebar">
-        {items.map(item => {
-          return <SidebarItem item={item} />;
+        {items.map((item, index) => {
+          return <SidebarItem item={item} key={index} />;
         })}
       </div>
     );

@@ -1,9 +1,8 @@
 import React from "react";
-import axios from "axios";
 import Card from "../components/Card";
-import "../../css/Timeline.scss";
+import axios from "axios";
 
-export default class Timeline extends React.Component {
+export default class Top extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
